@@ -1,0 +1,251 @@
+{% extends "layout.html" %} {% block title %}Dashboard{% endblock %} {% block
+head %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/dashboard.css') }}"
+/>
+<link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+/>
+<style>
+.main-content {
+    padding: 20px;
+}
+
+.stats-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+    margin-left: 270px;
+}
+
+.stat-card {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    transition: transform 0.2s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    font-size: 24px;
+}
+
+.balance-icon {
+    background: linear-gradient(135deg, #007bff, #00d2ff);
+    color: white;
+}
+
+.savings-icon {
+    background: linear-gradient(135deg, #00b09b, #96c93d);
+    color: white;
+}
+
+.account-icon {
+    background: linear-gradient(135deg, #5f2c82, #49a09d);
+    color: white;
+}
+
+.stat-info h3 {
+    margin: 0;
+    font-size: 14px;
+    color: #666;
+}
+
+.stat-info p {
+    margin: 5px 0 0;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+.card-section {
+    margin-bottom: 30px;
+}
+
+.card {
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.02);
+}
+
+.recent-activity {
+    background: white;
+    padding: 20px;
+    margin-left: 270px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.recent-activity h2 {
+    margin: 0 0 20px;
+    color: #333;
+    font-size: 18px;
+}
+
+.activity-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: #f8f9fa;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.activity-icon i {
+    font-size: 16px;
+    color: #007bff;
+}
+
+.activity-info {
+    flex-grow: 1;
+}
+
+.activity-info h4 {
+    margin: 0;
+    font-size: 14px;
+    color: #333;
+}
+
+.activity-info p {
+    margin: 5px 0 0;
+    font-size: 12px;
+    color: #666;
+}
+
+.activity-amount {
+    font-weight: bold;
+}
+
+.activity-amount.sent {
+    color: #dc3545;
+}
+
+.activity-amount.received {
+    color: #28a745;
+}
+</style>
+{% endblock %} {% block content %}
+
+{% if isDebug %}
+<div class="dashboard-box">
+  <h2>
+    Balance: Rp {{ "{:,.2f}".format(user.balance).replace('.', '#').replace(',',
+    '.').replace('#', ',') }}
+  </h2>
+  <form method="POST">
+    <h3>Top Up</h3>
+    <input type="hidden" name="topup" />
+    <input name="amount" type="number" step="0.01" required />
+    <button>Top Up</button>
+  </form>
+</div>
+{% endif %}
+
+<main class="main-content">
+    <!-- Stats Section -->
+    <div class="stats-container">
+        <div class="stat-card">
+            <div class="stat-icon balance-icon">
+                <i class="fas fa-wallet"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Saldo</h3>
+                <p>Rp {{ "{:,.2f}".format(user.balance).replace('.', '#').replace(',', '.').replace('#', ',') }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon savings-icon">
+                <i class="fas fa-piggy-bank"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Tabungan</h3>
+                <p>Rp {{ "{:,.2f}".format(user.savings).replace('.', '#').replace(',', '.').replace('#', ',') }}</p>
+            </div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-icon account-icon">
+                <i class="fas fa-credit-card"></i>
+            </div>
+            <div class="stat-info">
+                <h3>Nomor Rekening</h3>
+                <p>{{ user.acc_num }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Card Section -->
+    <div class="card-section">
+        <img src="{{ url_for('static', filename='img/cblue_front.png') }}" class="card" alt="Kartu Depan">
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="recent-activity">
+        <h2>Aktivitas Terakhir</h2>
+        <ul class="activity-list">
+            {% for tx in user.sent_transactions[:3] + user.received_transactions[:3] %}
+            <li class="activity-item">
+                <div class="activity-icon">
+                    <i class="fas {% if tx.sender_id==user.id %}fa-arrow-up{% else %}fa-arrow-down{% endif %}"></i>
+                </div>
+                <div class="activity-info">
+                    <h4>
+                        {% if tx.sender_id==user.id %}
+                            Transfer ke {{ tx.receiver.acc_num }}
+                        {% else %}
+                            Terima dari {{ tx.sender.acc_num }}
+                        {% endif %}
+                    </h4>
+                    <p>{{ tx.timestamp.strftime("%d %B %Y %H:%M") }}</p>
+                </div>
+                <div class="activity-amount {% if tx.sender_id==user.id %}sent{% else %}received{% endif %}">
+                    {% if tx.sender_id==user.id %}-{% else %}+{% endif %}
+                    Rp {{ "{:,.2f}".format(tx.amount).replace('.', '#').replace(',', '.').replace('#', ',') }}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</main>
+
+{% endblock %}
+

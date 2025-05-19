@@ -1,0 +1,449 @@
+{% extends "layout.html" %}
+{% block title %}Transfer{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/transfer.css') }}"/>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/notification.css') }}"/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" />
+<style>
+.transfer-wrapper {
+    padding: 2rem;
+    margin-left: 270px;
+    background: #f8f9fa;
+    min-height: calc(100vh - 60px);
+}
+
+.transfer-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 350px;
+    gap: 2rem;
+}
+
+.transfer-form-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2rem;
+}
+
+.transfer-summary {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2rem;
+    height: fit-content;
+    position: sticky;
+    top: 2rem;
+}
+
+.form-section {
+    margin-bottom: 2rem;
+}
+
+.form-section:last-child {
+    margin-bottom: 0;
+}
+
+.section-title {
+    font-size: 1.1rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.input-group {
+    margin-bottom: 1.5rem;
+}
+
+.input-group:last-child {
+    margin-bottom: 0;
+}
+
+.input-label {
+    display: block;
+    color: #6c757d;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.input-field {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: #f8f9fa;
+}
+
+.input-field:focus {
+    border-color: #007bff;
+    background: white;
+    outline: none;
+}
+
+.input-field:disabled {
+    background: #e9ecef;
+    cursor: not-allowed;
+}
+
+.bank-select {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 10px;
+    font-size: 1rem;
+    background: #f8f9fa;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%236c757d' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    background-size: 1em;
+}
+
+.bank-select:focus {
+    border-color: #007bff;
+    background-color: white;
+    outline: none;
+}
+
+.source-account {
+    background: #f8f9fa;
+    border-radius: 15px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.source-account-title {
+    color: #6c757d;
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+}
+
+.account-info {
+    display: grid;
+    gap: 1rem;
+}
+
+.info-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: #2c3e50;
+}
+
+.info-label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.info-value {
+    font-weight: 500;
+}
+
+.summary-section {
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.summary-section:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.summary-title {
+    font-size: 1rem;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-weight: 600;
+}
+
+.summary-item {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.8rem;
+    color: #6c757d;
+}
+
+.summary-item.total {
+    color: #2c3e50;
+    font-weight: 600;
+    font-size: 1.1rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px dashed #e9ecef;
+}
+
+.submit-button {
+    width: 100%;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    background: #007bff;
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.submit-button:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.submit-button:disabled {
+    background: #e9ecef;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.error-text {
+    color: #dc3545;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+}
+
+@media (max-width: 992px) {
+    .transfer-container {
+        grid-template-columns: 1fr;
+    }
+    
+    .transfer-summary {
+        position: static;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="transfer-wrapper">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="notification {{ category }}" id="notification-{{ loop.index }}">
+                    <span class="icon">
+                        {% if category == 'error' %}
+                            <i class="fas fa-exclamation-circle"></i>
+                        {% elif category == 'success' %}
+                            <i class="fas fa-check-circle"></i>
+                        {% endif %}
+                    </span>
+                    {{ message }}
+                    <div class="progress">
+                        <div class="progress-bar"></div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <div class="transfer-container">
+        <!-- Transfer Form -->
+        <div class="transfer-form-container">
+            <form class="transfer-form" method="POST">
+                <div class="form-section">
+                    <h2 class="section-title">Bank Information</h2>
+                    <div class="input-group">
+                        <label class="input-label">Bank Tujuan</label>
+                        <select name="bank" class="bank-select" required>
+                            <option selected disabled>Pilih Bank</option>
+                            <option value="cloud">Cloud Bank</option>
+                            <option disabled>Bank Rakyat Indonesia (BRI)</option>
+                            <option disabled>Bank Mandiri</option>
+                            <option disabled>Bank Negara Indonesia (BNI)</option>
+                            <option disabled>Bank Tabungan Negara (BTN)</option>
+                            <option disabled>Bank Central Asia (BCA)</option>
+                            <option disabled>Bank CIMB Niaga</option>
+                            <option disabled>Bank Syariah Indonesia (BSI)</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Nomor Rekening</label>
+                        <input
+                            type="text"
+                            name="to"
+                            id="noRekening"
+                            class="input-field"
+                            placeholder="Masukkan nomor rekening (contoh: 1234 5678 9012 3456)"
+                            pattern="[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}"
+                            required
+                        />
+                        <span id="error-nominal" class="error-text"></span>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Sumber Dana</h2>
+                    <div class="source-account">
+                        <div class="account-info">
+                            <div class="info-item">
+                                <span class="info-label">Bank</span>
+                                <span class="info-value">Cloud Bank</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">Saldo</span>
+                                <span class="info-value">Rp {{ "{:,.2f}".format(user.balance).replace('.', '#').replace(',', '.').replace('#', ',') }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">No. Rekening</span>
+                                <span class="info-value">{{ user.acc_num }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-section">
+                    <h2 class="section-title">Detail Transfer</h2>
+                    <div class="input-group">
+                        <label class="input-label">Nominal Transfer</label>
+                        <input
+                            type="number"
+                            name="amount"
+                            id="nominalTransfer"
+                            class="input-field"
+                            placeholder="Masukkan nominal transfer"
+                            min="50000"
+                            required
+                        />
+                        <span id="error-message" class="error-text"></span>
+                    </div>
+
+                    <div class="input-group">
+                        <label class="input-label">Pesan (Opsional)</label>
+                        <input 
+                            type="text" 
+                            name="message" 
+                            class="input-field"
+                            placeholder="Tulis pesan jika ada" 
+                        />
+                    </div>
+                </div>
+
+                <button type="submit" id="submitBtn" class="submit-button" disabled>LANJUTKAN</button>
+            </form>
+        </div>
+
+        <!-- Transfer Summary -->
+        <div class="transfer-summary">
+            <div class="summary-section">
+                <h3 class="summary-title">Ringkasan Transfer</h3>
+                <div class="summary-item">
+                    <span>Bank Tujuan</span>
+                    <span id="summaryBank">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>No. Rekening</span>
+                    <span id="summaryAccount">-</span>
+                </div>
+                <div class="summary-item">
+                    <span>Nominal Transfer</span>
+                    <span id="summaryAmount">-</span>
+                </div>
+            </div>
+
+            <div class="summary-section">
+                <h3 class="summary-title">Biaya</h3>
+                <div class="summary-item">
+                    <span>Biaya Transfer</span>
+                    <span>Rp 0</span>
+                </div>
+                <div class="summary-item total">
+                    <span>Total</span>
+                    <span id="summaryTotal">-</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+const nominalInput = document.getElementById('nominalTransfer');
+const errorMessage = document.getElementById('error-message');
+const submitBtn = document.getElementById('submitBtn');
+const accInput = document.getElementById('noRekening');
+const bankSelect = document.querySelector('select[name="bank"]');
+
+// Summary elements
+const summaryBank = document.getElementById('summaryBank');
+const summaryAccount = document.getElementById('summaryAccount');
+const summaryAmount = document.getElementById('summaryAmount');
+const summaryTotal = document.getElementById('summaryTotal');
+
+function formatCurrency(amount) {
+    return new Intl.NumberFormat('id-ID', {
+        style: 'currency',
+        currency: 'IDR',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    }).format(amount);
+}
+
+function updateSummary() {
+    summaryBank.textContent = bankSelect.value === 'cloud' ? 'Cloud Bank' : '-';
+    summaryAccount.textContent = accInput.value || '-';
+    
+    const amount = parseFloat(nominalInput.value) || 0;
+    summaryAmount.textContent = amount ? formatCurrency(amount) : '-';
+    summaryTotal.textContent = amount ? formatCurrency(amount) : '-';
+}
+
+function validateForm() {
+    const nominal = parseInt(nominalInput.value) || 0;
+    const accValid = accInput.value.match(/^[0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4}$/);
+    const bankValid = bankSelect.value === 'cloud';
+    
+    if (nominal < 50000) {
+        errorMessage.textContent = "Minimal transfer Rp 50.000";
+        submitBtn.disabled = true;
+    } else if (!accValid) {
+        errorMessage.textContent = "Format nomor rekening tidak valid";
+        submitBtn.disabled = true;
+    } else if (!bankValid) {
+        errorMessage.textContent = "Hanya transfer ke Cloud Bank yang tersedia saat ini";
+        submitBtn.disabled = true;
+    } else {
+        errorMessage.textContent = "";
+        submitBtn.disabled = false;
+    }
+    
+    updateSummary();
+}
+
+// Format account number input as user types
+accInput.addEventListener('input', function(e) {
+    let value = this.value.replace(/\D/g, '');
+    let formatted = '';
+    for(let i = 0; i < value.length && i < 16; i++) {
+        if(i > 0 && i % 4 === 0) {
+            formatted += ' ';
+        }
+        formatted += value[i];
+    }
+    this.value = formatted;
+    validateForm();
+});
+
+nominalInput.addEventListener('input', validateForm);
+bankSelect.addEventListener('change', validateForm);
+
+// Show notifications with progress bar
+document.addEventListener('DOMContentLoaded', function() {
+    const notifications = document.querySelectorAll('.notification');
+    notifications.forEach(notification => {
+        setTimeout(() => {
+            notification.classList.add('show');
+        }, 100);
+
+        setTimeout(() => {
+            notification.remove();
+        }, 4000);
+    });
+});
+</script>
+{% endblock %}

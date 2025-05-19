@@ -1,0 +1,353 @@
+{% extends "layout.html" %}
+{% block title %}Settings{% endblock %}
+{% block head %}
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<style>
+.settings-wrapper {
+    padding: 2rem;
+    margin-left: 270px;
+    background: #f8f9fa;
+    min-height: calc(100vh - 60px);
+}
+
+.settings-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.settings-header {
+    margin-bottom: 2rem;
+}
+
+.settings-title {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.settings-subtitle {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.settings-grid {
+    display: grid;
+    gap: 2rem;
+}
+
+.settings-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2rem;
+}
+
+.card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.card-icon {
+    width: 40px;
+    height: 40px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #007bff;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.setting-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    border-bottom: 1px solid #eee;
+}
+
+.setting-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.setting-info h3 {
+    font-size: 1rem;
+    color: #2c3e50;
+    margin-bottom: 0.3rem;
+}
+
+.setting-info p {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 50px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #007bff;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* Select Dropdown */
+.setting-select {
+    padding: 0.5rem 1rem;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: #2c3e50;
+    background: #f8f9fa;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.setting-select:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* Notification */
+.notification {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    color: white;
+    animation: slideIn 0.3s ease;
+    z-index: 1000;
+}
+
+.notification.success {
+    background: #28a745;
+}
+
+.notification.error {
+    background: #dc3545;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Dark mode styles */
+body.dark-mode .settings-wrapper {
+    background: #1a1a1a;
+}
+
+body.dark-mode .settings-title {
+    color: #ffffff;
+}
+
+body.dark-mode .settings-subtitle {
+    color: #a0a0a0;
+}
+
+body.dark-mode .settings-card {
+    background: #2d2d2d;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+}
+
+body.dark-mode .card-icon {
+    background: #3d3d3d;
+    color: #007bff;
+}
+
+body.dark-mode .card-title {
+    color: #ffffff;
+}
+
+body.dark-mode .setting-info h3 {
+    color: #ffffff;
+}
+
+body.dark-mode .setting-info p {
+    color: #a0a0a0;
+}
+
+body.dark-mode .setting-select {
+    background: #3d3d3d;
+    border-color: #4d4d4d;
+    color: #ffffff;
+}
+
+body.dark-mode .setting-select:focus {
+    border-color: #007bff;
+}
+
+body.dark-mode .setting-select option {
+    background: #2d2d2d;
+    color: #ffffff;
+}
+
+body.dark-mode .setting-item {
+    border-bottom-color: #3d3d3d;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="settings-wrapper">
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1 class="settings-title">{% if user.language == 'en' %}Settings{% else %}Pengaturan{% endif %}</h1>
+            <p class="settings-subtitle">{% if user.language == 'en' %}Manage your account settings and preferences{% else %}Kelola pengaturan dan preferensi akun Anda{% endif %}</p>
+        </div>
+
+        <div class="settings-grid">
+            <!-- Display Settings -->
+            <div class="settings-card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class='bx bx-palette'></i>
+                    </div>
+                    <h2 class="card-title">{% if user.language == 'en' %}Display{% else %}Tampilan{% endif %}</h2>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>{% if user.language == 'en' %}Language{% else %}Bahasa{% endif %}</h3>
+                        <p>{% if user.language == 'en' %}Choose your preferred language{% else %}Pilih bahasa yang Anda inginkan{% endif %}</p>
+                    </div>
+                    <select class="setting-select" id="language">
+                        <option value="id" {% if user.language == 'id' %}selected{% endif %}>Bahasa Indonesia</option>
+                        <option value="en" {% if user.language == 'en' %}selected{% endif %}>English</option>
+                    </select>
+                </div>
+
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>{% if user.language == 'en' %}Dark Mode{% else %}Mode Gelap{% endif %}</h3>
+                        <p>{% if user.language == 'en' %}Switch between light and dark theme{% else %}Beralih antara tema terang dan gelap{% endif %}</p>
+                    </div>
+                    <label class="switch">
+                        <input type="checkbox" 
+                               id="dark-mode" 
+                               {% if user.dark_mode %}checked{% endif %}>
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Helper function to show notifications
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+
+// Helper function to update settings
+async function updateSetting(type, value, field = null) {
+    try {
+        const formData = new FormData();
+        formData.append('type', type);
+        formData.append('value', value);
+        if (field) formData.append('field', field);
+        
+        const response = await fetch('/settings/update', {
+            method: 'POST',
+            body: formData
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+            const message = document.documentElement.lang === 'en' 
+                ? 'Settings updated successfully'
+                : 'Pengaturan berhasil diperbarui';
+            showNotification(message, 'success');
+            return data;
+        } else {
+            throw new Error(data.error || 'Failed to update settings');
+        }
+    } catch (error) {
+        const message = document.documentElement.lang === 'en'
+            ? 'Failed to update settings'
+            : 'Gagal memperbarui pengaturan';
+        showNotification(message, 'error');
+        return null;
+    }
+}
+
+// Display Settings
+document.getElementById('language').addEventListener('change', function() {
+    updateSetting('display', this.value, 'language').then(() => {
+        // Reload the page to apply language changes
+        window.location.reload();
+    });
+});
+
+document.getElementById('dark-mode').addEventListener('change', function() {
+    updateSetting('display', this.checked, 'dark_mode').then(() => {
+        // Apply dark mode changes in real-time
+        document.body.classList.toggle('dark-mode', this.checked);
+    });
+});
+</script>
+{% endblock %}

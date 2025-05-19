@@ -1,0 +1,214 @@
+{% extends "layout.html" %}
+{% block title %}History{% endblock %}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<style>
+.history-wrapper {
+    padding: 2rem;
+    margin-left: 270px;
+    background: #f8f9fa;
+    min-height: calc(100vh - 60px);
+}
+
+.history-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.history-header {
+    margin-bottom: 2rem;
+}
+
+.history-title {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.history-subtitle {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.transaction-list {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.transaction-item {
+    padding: 1.5rem;
+    border-bottom: 1px solid #eef2f7;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-item:hover {
+    background: #f8f9fa;
+}
+
+.transaction-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+}
+
+.transaction-icon.sent {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.transaction-icon.received {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.transaction-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.transaction-primary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.transaction-label {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.transaction-acc {
+    color: #6c757d;
+    font-size: 0.9rem;
+}
+
+.transaction-date {
+    color: #8392a5;
+    font-size: 0.85rem;
+}
+
+.transaction-message {
+    margin-top: 0.2rem;
+    color: #6c757d;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+
+.transaction-amount {
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-align: right;
+}
+
+.transaction-amount.sent {
+    color: #dc3545;
+}
+
+.transaction-amount.received {
+    color: #28a745;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem;
+    color: #6c757d;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    color: #adb5bd;
+}
+
+.empty-state p {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+    .transaction-item {
+        grid-template-columns: 1fr auto;
+        gap: 1rem;
+    }
+
+    .transaction-icon {
+        display: none;
+    }
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="history-wrapper">
+    <div class="history-container">
+        <div class="history-header">
+            <h1 class="history-title">Riwayat Transaksi</h1>
+            <p class="history-subtitle">Semua transaksi masuk dan keluar dari akun Anda</p>
+        </div>
+
+        <div class="transaction-list">
+            {% if transactions %}
+                {% for tx in transactions %}
+                <div class="transaction-item">
+                    <div class="transaction-icon {% if tx.sender_id==user.id %}sent{% else %}received{% endif %}">
+                        <i class='bx {% if tx.sender_id==user.id %}bx-up-arrow-alt{% else %}bx-down-arrow-alt{% endif %}'></i>
+                    </div>
+                    <div class="transaction-info">
+                        <div class="transaction-primary">
+                            <span class="transaction-label">
+                                {% if tx.sender_id==user.id %}
+                                    Transfer ke
+                                {% else %}
+                                    Terima dari
+                                {% endif %}
+                            </span>
+                            <span class="transaction-acc">
+                                {% if tx.sender_id==user.id %}
+                                    {{ tx.receiver.acc_num }}
+                                {% else %}
+                                    {{ tx.sender.acc_num }}
+                                {% endif %}
+                            </span>
+                        </div>
+                        <div class="transaction-date">
+                            {{ tx.timestamp.strftime("%d %B %Y %H:%M") }}
+                        </div>
+                        {% if tx.message %}
+                            <div class="transaction-message">
+                                "{{ tx.message }}"
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="transaction-amount {% if tx.sender_id==user.id %}sent{% else %}received{% endif %}">
+                        {% if tx.sender_id==user.id %}-{% else %}+{% endif %}
+                        Rp {{ "{:,.2f}".format(tx.amount).replace('.', '#').replace(',', '.').replace('#', ',') }}
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="empty-state">
+                    <i class='bx bx-history'></i>
+                    <p>Belum ada transaksi</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

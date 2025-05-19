@@ -1,0 +1,193 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  color: #333;
+}
+
+.sidebar {
+  width: 270px;
+  background-color: #fff;
+  position: fixed;
+  height: 100%;
+  border-right: 1px solid #ddd;
+  padding-top: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidebar img {
+  width: 150px; /* atau sesuaikan dengan kebutuhan, misalnya 100px */
+  height: auto;
+  display: block;
+  margin: 0 auto 20px; /* untuk tengah dan jarak bawah */
+}
+
+.sidebar-menu {
+  flex: 1;
+}
+
+.sidebar a {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  text-decoration: none;
+  color: #000;
+  font-weight: bold;
+  border-radius: 8px;
+  margin: 5px 10px;
+  transition: background 0.3s;
+}
+
+.sidebar a i {
+  margin-right: 10px;
+}
+
+.sidebar a:hover,
+.sidebar a.active {
+  background-color: #00aaff;
+  color: white;
+}
+
+.topbar {
+  margin-left: 270px;
+  background-color: #2dabff;
+  color: white;
+  padding: 20px 30px;
+  font-size: 20px;
+  font-weight: bold;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 60px;
+}
+
+.menu-dot {
+  position: relative;
+  cursor: pointer;
+}
+
+.dropdown {
+  position: absolute;
+  right: 20px;
+  top: 60px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  display: none;
+  z-index: 10;
+}
+
+.dropdown a {
+  display: block;
+  padding: 10px 20px;
+  color: #333;
+  text-decoration: none;
+}
+
+.dropdown a:hover {
+  background-color: #f0f0f0;
+}
+
+.main {
+  padding: 30px 40px;
+  background-color: #f4f4f4;
+  min-height: 100vh;
+  margin-left: 270px;
+  margin-top: 60px;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 25px 30px;
+  margin-bottom: 30px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+}
+
+.section-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #007bff;
+}
+
+.card form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  font-weight: 600;
+  margin-bottom: 6px;
+  color: #333;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+  padding: 12px 14px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  background-color: #fff;
+  transition: border 0.3s;
+  box-sizing: border-box;
+  max-width: 450px;
+}
+
+input:focus {
+  border-color: #007bff;
+  outline: none;
+  background-color: #f0faff;
+}
+
+input[type="checkbox"] {
+  margin-right: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #333;
+}
+
+.btn {
+  background-color: #007bff;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  width: 100%;
+  max-width: 450px;
+}
+
+.btn:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    position: relative;
+  }
+
+  .topbar,
+  .main {
+    margin-left: 0;
+  }
+}

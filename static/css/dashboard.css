@@ -1,0 +1,223 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+  }
+  
+  .sidebar {
+    width: 270px;
+    background-color: #fff;
+    position: fixed;
+    height: 100%;
+    border-right: 1px solid #ddd;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .sidebar img {
+    width: 150px; /* atau sesuaikan dengan kebutuhan, misalnya 100px */
+    height: auto;
+    display: block;
+    margin: 0 auto 20px; /* untuk tengah dan jarak bawah */
+  }
+  
+  .sidebar-menu {
+    flex: 1;
+  }
+  
+  .sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #00aaff;
+  }
+  
+  .sidebar a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    border-radius: 8px;
+    margin: 5px 10px;
+    transition: background 0.3s;
+  }
+  
+  .sidebar a i {
+    margin-right: 10px;
+  }
+  
+  .sidebar a:hover,
+  .sidebar a.active {
+    background-color: #00aaff;
+    color: white;
+  }
+  
+  .topbar {
+    margin-left: 270px;
+    background-color: #2dabff;
+    color: white;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 0 0 10px 10px;
+    position: relative;
+  }
+  
+  .menu-dot {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .dropdown {
+    position: absolute;
+    right: 20px;
+    top: 60px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 10;
+  }
+  
+  .dropdown a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .dropdown a:hover {
+    background-color: #f0f0f0;
+  }
+  .card-section {
+   text-align: center;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+
+  }
+  
+  .card {
+    width: 350px;
+    height: auto;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin: 10px;
+
+  }
+  .card1 {
+    width: 350px;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin: 10px;
+  }
+  
+  .info-section {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .info-box {
+    background-color: #00a8ec;
+    color: white;
+    padding: 25px 30px;
+    border-radius: 20px;
+    min-width: 250px;
+    text-align: center;
+  }
+  
+  .info-box h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+  
+  .info-box p {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  
+  /* FOOTER STYLE (yang kamu kirim, dengan jarak) */
+  .footer {
+    background-color: #d0e7f9;
+    padding: 40px;
+    margin-left: 270px;
+    margin-top: 350px;
+    border-top: 2px solid #333;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .footer-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 10px 0;
+  }
+  
+  .footer-section {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px;
+  }
+  
+  .footer-section h4 {
+    margin-bottom: 10px;
+    color: #000;
+  }
+  
+  .footer-section p {
+    margin: 5px 0;
+    color: #222;
+  }
+  
+  .footer-section i {
+    margin-right: 8px;
+  }
+  
+  .footer-divider {
+    border-top: 1px solid #aaa;
+    margin: 10px 0;
+  }
+  
+  .text-footer {
+    text-align: center;
+    padding: 10px 20px;
+    font-style: italic;
+  }
+  
+  .footer-bottom {
+    background-color: #00aaff;
+    text-align: center;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%;
+      position: relative;
+    }
+  
+    .topbar, .content, .footer {
+      margin-left: 0;
+    }
+  
+    .footer-container {
+      flex-direction: column;
+      text-align: center;
+    }
+  }

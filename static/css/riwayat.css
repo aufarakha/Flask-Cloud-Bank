@@ -1,0 +1,315 @@
+/* Global Styles */
+
+  main-content {
+    flex: 1;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .summary {
+    display: flex;
+    gap: 30px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+  }
+  
+  .card {
+    padding: 25px 40px;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #fff;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    min-width: 250px;
+    flex: 1;
+    text-align: center;
+  }
+  
+  .card.masuk {
+    background-color: #3aa9f7;
+  }
+  
+  .card.keluar {
+    background-color: #e63946;
+  }
+  
+  .transactions {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 100%;
+  }
+  
+  .transaksi {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #1a1f33;
+    padding: 25px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 100%;
+  }
+  
+  .transaksi:hover {
+    transform: translateY(-2px);
+  }
+  
+  .transaksi.masuk {
+    background-color: #3498db;
+  }
+  
+  .transaksi.keluar {
+    background-color: #c0392b;
+  }
+  
+  .title {
+    font-size: 1rem;
+    color: #eee;
+  }
+  
+  .amount {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: white;
+  }
+  
+  .date {
+    font-size: 0.95rem;
+    color: #ddd;
+  }
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+  }
+  
+  .sidebar {
+    width: 270px;
+    background-color: #fff;
+    position: fixed;
+    height: 100%;
+    border-right: 1px solid #ddd;
+    padding-top: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .sidebar img {
+    width: 150px; /* atau sesuaikan dengan kebutuhan, misalnya 100px */
+    height: auto;
+    display: block;
+    margin: 0 auto 20px; /* untuk tengah dan jarak bawah */
+  }
+  
+  .sidebar-menu {
+    flex: 1;
+  }
+  
+  .sidebar h2 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #00aaff;
+  }
+  
+  .sidebar a {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    border-radius: 8px;
+    margin: 5px 10px;
+    transition: background 0.3s;
+  }
+  
+  .sidebar a i {
+    margin-right: 10px;
+  }
+  
+  .sidebar a:hover,
+  .sidebar a.active {
+    background-color: #00aaff;
+    color: white;
+  }
+  
+  .topbar {
+    margin-left: 270px;
+    background-color: #2dabff;
+    color: white;
+    padding: 20px 30px; /* sebelumnya 100px */
+    font-size: 20px;
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    height: 60px;
+  }
+  
+  .main-content {
+    margin-left: 270px;
+    margin-top: 70px; /* tambahan penting */
+    padding: 40px;
+    max-width: 1200px;
+    flex: 1;
+  }
+  
+  
+  
+  .menu-dot {
+    position: relative;
+    cursor: pointer;
+  }
+  
+  .dropdown {
+    position: absolute;
+    right: 20px;
+    top: 60px;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 10;
+  }
+  
+  .dropdown a {
+    display: block;
+    padding: 10px 20px;
+    color: #333;
+    text-decoration: none;
+  }
+  
+  .dropdown a:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .content {
+    margin-left: 270px;
+    padding: 30px;
+  }
+  
+  .account-box {
+    background-color: #eaeaea;
+    border-radius: 15px;
+    padding: 30px;
+    display: flex;
+    align-items: center;
+    gap: 30px;
+  }
+  
+  .account-photo {
+    width: 150px;
+    height: 150px;
+    background-color: #555;
+    border-radius: 50%;
+    position: relative;
+  }
+  
+  .account-photo i {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: red;
+    color: white;
+    padding: 6px;
+    border-radius: 50%;
+  }
+  
+  .account-info {
+    flex: 1;
+  }
+  
+  .account-info h2 {
+    margin: 0;
+  }
+  
+  .account-info .card-number {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .account-details p {
+    margin: 10px 0;
+    border-bottom: 1px solid #888;
+    padding-bottom: 5px;
+  }
+  
+  /* FOOTER STYLE (yang kamu kirim, dengan jarak) */
+  .footer {
+    background-color: #d0e7f9;
+    padding: 40px;
+    margin-left: 270px;
+    margin-top: 50px;
+    border-top: 2px solid #333;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .footer-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    padding: 10px 0;
+  }
+  
+  .footer-section {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px;
+  }
+  
+  .footer-section h4 {
+    margin-bottom: 10px;
+    color: #000;
+  }
+  
+  .footer-section p {
+    margin: 5px 0;
+    color: #222;
+  }
+  
+  .footer-section i {
+    margin-right: 8px;
+  }
+  
+  .footer-divider {
+    border-top: 1px solid #aaa;
+    margin: 10px 0;
+  }
+  
+  .text-footer {
+    text-align: center;
+    padding: 10px 20px;
+    font-style: italic;
+  }
+  
+  .footer-bottom {
+    background-color: #00aaff;
+    text-align: center;
+    padding: 10px;
+    color: white;
+    font-weight: bold;
+  }
+  
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 100%;
+      position: relative;
+    }
+  
+    .topbar, .content, .footer {
+      margin-left: 0;
+    }
+  
+    .footer-container {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+  

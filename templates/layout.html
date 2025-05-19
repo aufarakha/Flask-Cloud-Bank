@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="{{ user.language }}">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>{% block title %}Bank Awan{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+  <link
+  rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/all.min.css"
+  />
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <style>
+    /* Dark mode styles */
+    body.dark-mode {
+      background-color: #1a1a1a;
+      color: #ffffff;
+    }
+
+    body.dark-mode .sidebar {
+      background-color: #2d2d2d;
+      border-right-color: #3d3d3d;
+    }
+
+    body.dark-mode .sidebar a {
+      color: #ffffff;
+    }
+
+    body.dark-mode .sidebar a:hover,
+    body.dark-mode .sidebar a.active {
+      background-color: #007bff;
+    }
+
+    body.dark-mode .topbar {
+      background-color: #2d2d2d;
+    }
+
+    body.dark-mode .content {
+      background-color: #1a1a1a;
+    }
+
+    body.dark-mode .dropdown {
+      background-color: #2d2d2d;
+      border-color: #3d3d3d;
+    }
+
+    body.dark-mode .dropdown a {
+      color: #ffffff;
+    }
+
+    body.dark-mode .dropdown a:hover {
+      background-color: #3d3d3d;
+    }
+  </style>
+  {% block head %}{% endblock %}
+</head>
+<body class="{% if user.dark_mode %}dark-mode{% endif %}">
+  <div class="sidebar">
+    <div>
+      <img src="{{ url_for('static', filename='img/bank-awan[1].png') }}" alt="logo">
+      <div class="sidebar-menu">
+        <a href="{{ url_for('home') }}"
+           class="{% if active_page=='home' %}active{% endif %}">
+           <i></i>
+           <i class='bx bx-home-alt' ></i>
+          {% if user.language == 'en' %}Home{% else %}Beranda{% endif %}
+        </a>
+        <a href="{{ url_for('dashboard') }}"
+           class="{% if active_page=='dashboard' %}active{% endif %}">
+           <i></i>
+           <i class='bx bxs-dashboard' ></i>
+          Dashboard
+        </a>
+        <a href="{{ url_for('account') }}"
+           class="{% if active_page=='account' %}active{% endif %}">
+           <i></i>
+           <i class='bx bx-user'></i>
+          {% if user.language == 'en' %}Account{% else %}Akun{% endif %}
+        </a>
+        <a href="{{ url_for('transfer') }}"
+           class="{% if active_page=='transfer' %}active{% endif %}">
+           <i></i>
+           <i class='bx bx-transfer' ></i>
+          Transfer
+        </a>
+        <a href="{{ url_for('history') }}"
+           class="{% if active_page=='history' %}active{% endif %}">
+           <i></i>
+           <i class='bx bx-history' ></i>
+          {% if user.language == 'en' %}History{% else %}Riwayat{% endif %}
+        </a>
+      </div>
+    </div>
+    <a href="{{ url_for('settings') }}"
+       class="{% if active_page=='settings' %}active{% endif %}">
+       <i></i>
+       <i class='bx bx-cog' ></i>
+      {% if user.language == 'en' %}Settings{% else %}Pengaturan{% endif %}
+    </a>
+    {% if user.role in ['admin','owner'] %}
+    <a href="{{ url_for('admin_panel') }}"
+       class="{% if active_page=='admin' %}active{% endif %}">
+      {% if user.language == 'en' %}Admin Panel{% else %}Panel Admin{% endif %}
+    </a>
+    {% endif %}
+  </div>
+
+  <div class="topbar">
+    <span>{% if user.language == 'en' %}Hello{% else %}Halo{% endif %}, {{ user.username }}!</span>
+    <div class="menu-dot" onclick="toggleDropdown()">
+      ⋮
+      <div class="dropdown" id="dropdownMenu">
+        <a href="{{ url_for('logout') }}">{% if user.language == 'en' %}Logout{% else %}Keluar{% endif %}</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="content">
+    {% block content %}{% endblock %}
+  </main>
+  <script src="{{ url_for('static', filename='js/test.js') }}"></script>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

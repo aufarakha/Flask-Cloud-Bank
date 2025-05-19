@@ -1,0 +1,17 @@
+.currency-symbol {
+    font-size: 24px;
+    font-weight: bold;
+    padding: 8px;
+    border-radius: 4px;
+    background-color: #f8f9fa;
+    display: inline-block;
+    min-width: 40px;
+    text-align: center;
+}
+
+.currency-usd::before { content: '$'; color: #2E7D32; }
+.currency-sgd::before { content: 'S$'; color: #1565C0; }
+.currency-aud::before { content: 'A$'; color: #D32F2F; }
+.currency-eur::before { content: '€'; color: #1976D2; }
+.currency-gbp::before { content: '£'; color: #283593; }
+.currency-idr::before { content: 'Rp'; color: #C62828; } 

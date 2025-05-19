@@ -1,0 +1,1315 @@
+{% extends "layout.html" %}
+{% block title %}Admin Panel{% endblock %}
+{% block head %}
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+<style>
+.admin-wrapper {
+    padding: 2rem;
+    margin-left: 270px;
+    background: #f8f9fa;
+    min-height: calc(100vh - 60px);
+}
+
+.admin-container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.admin-header {
+    margin-bottom: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.admin-title {
+    font-size: 1.5rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.admin-role {
+    color: #6c757d;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    background: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+.create-user-section {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.section-header i {
+    font-size: 1.5rem;
+    color: #007bff;
+    margin-right: 0.8rem;
+}
+
+.section-title {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.create-user-form {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+    align-items: end;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.form-group label {
+    font-size: 0.9rem;
+    color: #6c757d;
+}
+
+.form-control {
+    padding: 0.8rem;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0,123,255,0.1);
+    outline: none;
+}
+
+.btn {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.btn-primary {
+    background: #007bff;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #0056b3;
+    transform: translateY(-1px);
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+}
+
+.btn-success {
+    background: #28a745;
+    color: white;
+}
+
+.btn-success:hover {
+    background: #218838;
+}
+
+.toggle-section {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #dee2e6;
+}
+
+.toggle-section p {
+    color: #6c757d;
+    font-size: 0.95rem;
+    margin: 0;
+}
+
+.users-table-container {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    overflow: hidden;
+}
+
+.users-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.users-table th,
+.users-table td {
+    padding: 1.2rem;
+    text-align: left;
+}
+
+.users-table th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #2c3e50;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.users-table tr {
+    border-bottom: 1px solid #dee2e6;
+    transition: all 0.3s ease;
+}
+
+.users-table tr:last-child {
+    border-bottom: none;
+}
+
+.users-table tr:hover {
+    background: #f8f9fa;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.user-profile-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+}
+
+.user-name {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.user-email {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.user-role {
+    display: inline-block;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.role-owner {
+    background: rgba(0,123,255,0.1);
+    color: #007bff;
+}
+
+.role-admin {
+    background: rgba(40,167,69,0.1);
+    color: #28a745;
+}
+
+.role-user {
+    background: rgba(108,117,125,0.1);
+    color: #6c757d;
+}
+
+.user-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 0.9rem;
+}
+
+.status-active {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.status-active i {
+    color: #28a745;
+}
+
+.status-banned {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.status-banned i {
+    color: #dc3545;
+}
+
+.user-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.alert {
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+}
+
+.alert i {
+    font-size: 1.2rem;
+}
+
+.alert-info {
+    background: rgba(0,123,255,0.1);
+    color: #007bff;
+    border: 1px solid rgba(0,123,255,0.2);
+}
+
+.alert-success {
+    background: rgba(40,167,69,0.1);
+    color: #28a745;
+    border: 1px solid rgba(40,167,69,0.2);
+}
+
+.alert-error {
+    background: rgba(220,53,69,0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220,53,69,0.2);
+}
+
+/* Add modal styles */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1050;
+}
+
+.modal.show {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    position: relative;
+    width: 90%;
+    max-width: 500px;
+    margin: 20px auto;
+    animation: modalFadeIn 0.3s ease;
+}
+
+body.dark-mode .modal-content {
+    background: #2d2d2d;
+    color: white;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.modal-title {
+    margin: 0;
+    font-size: 1.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+body.dark-mode .modal-title {
+    color: white;
+}
+
+.modal-body {
+    padding: 1.5rem;
+    max-height: calc(100vh - 200px);
+    overflow-y: auto;
+}
+
+.close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: #6c757d;
+    transition: color 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.close:hover {
+    color: #343a40;
+}
+
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Fix modal display when hidden */
+.modal[style*="display: none"] {
+    display: none !important;
+}
+
+.btn-delete {
+    background: #dc3545;
+    color: white;
+}
+
+.btn-delete:hover {
+    background: #c82333;
+}
+
+/* Admin Selection Styles */
+.admin-selection {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2rem;
+    margin-bottom: 2rem;
+}
+
+.admin-selection-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-selection-title {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    font-weight: 600;
+}
+
+.admin-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.admin-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+    flex: 1;
+    min-width: 200px;
+    max-width: 300px;
+}
+
+.admin-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.admin-card.selected {
+    border-color: #007bff;
+    background: rgba(0,123,255,0.05);
+}
+
+.admin-card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.8rem;
+}
+
+.admin-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.admin-info h3 {
+    font-size: 1rem;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.admin-info p {
+    font-size: 0.85rem;
+    color: #6c757d;
+    margin: 0;
+}
+
+/* Enhanced Permissions Section */
+.permissions-section {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    display: none;
+}
+
+.permissions-section.visible {
+    display: block;
+}
+
+.permissions-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #eee;
+}
+
+.permissions-title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.permissions-title i {
+    font-size: 1.5rem;
+    color: #007bff;
+}
+
+.permissions-title h2 {
+    font-size: 1.2rem;
+    color: #2c3e50;
+    margin: 0;
+}
+
+.permissions-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.permission-card {
+    background: #f8f9fa;
+    border-radius: 12px;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+}
+
+.permission-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.permission-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+}
+
+.permission-info {
+    flex: 1;
+}
+
+.permission-name {
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.permission-description {
+    font-size: 0.9rem;
+    color: #6c757d;
+    line-height: 1.4;
+}
+
+/* Enhanced Toggle Switch */
+.permission-toggle {
+    position: relative;
+    width: 50px;
+    height: 24px;
+    margin-left: 1rem;
+}
+
+.permission-toggle input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.permission-slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+    border-radius: 34px;
+}
+
+.permission-slider:before {
+    position: absolute;
+    content: "";
+    height: 16px;
+    width: 16px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .permission-slider {
+    background-color: #007bff;
+}
+
+input:checked + .permission-slider:before {
+    transform: translateX(26px);
+}
+
+/* Notification Styles */
+.notification {
+    position: fixed;
+    top: 2rem;
+    right: 2rem;
+    padding: 1rem 2rem;
+    border-radius: 10px;
+    color: white;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    animation: slideIn 0.3s ease;
+}
+
+.notification.success {
+    background: #28a745;
+}
+
+.notification.error {
+    background: #dc3545;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.permission-toggle.disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.permission-toggle.disabled input {
+    cursor: not-allowed;
+}
+
+.permission-toggle.disabled .permission-slider {
+    background-color: #ccc;
+}
+
+.permission-toggle.disabled:hover .permission-slider {
+    background-color: #ccc;
+}
+
+/* Add these styles to your existing CSS */
+.users-table td {
+    vertical-align: middle;
+    padding: 1rem;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+}
+
+.btn-sm {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.875rem;
+}
+
+.role-form {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.promoter-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.promoter-img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.no-promoter {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.user-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+}
+
+.status-active {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.status-banned {
+    background-color: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.form-control {
+    padding: 0.4rem;
+    border-radius: 4px;
+    border: 1px solid #ced4da;
+}
+
+.user-role {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.875rem;
+    text-transform: capitalize;
+}
+
+.role-admin {
+    background-color: rgba(0, 123, 255, 0.1);
+    color: #007bff;
+}
+
+.role-owner {
+    background-color: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+}
+
+.role-user {
+    background-color: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+/* Modal size for transactions */
+.modal-lg {
+    max-width: 800px;
+}
+
+/* Transaction list styles */
+.transaction-item {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid #eee;
+    align-items: center;
+}
+
+.transaction-item:last-child {
+    border-bottom: none;
+}
+
+.transaction-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.transaction-icon.sent {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+}
+
+.transaction-icon.received {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+}
+
+.transaction-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+}
+
+.transaction-primary {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.transaction-date {
+    font-size: 0.85rem;
+    color: #6c757d;
+}
+
+.transaction-message {
+    font-size: 0.9rem;
+    color: #6c757d;
+    font-style: italic;
+}
+
+.transaction-amount {
+    font-weight: 600;
+    text-align: right;
+}
+
+.transaction-amount.sent {
+    color: #dc3545;
+}
+
+.transaction-amount.received {
+    color: #28a745;
+}
+
+.no-transactions {
+    text-align: center;
+    padding: 2rem;
+    color: #6c757d;
+}
+
+.no-transactions i {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    display: block;
+}
+
+.text-center {
+    text-align: center;
+}
+
+.text-danger {
+    color: #dc3545;
+}
+
+/* Add loading spinner animation */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.bx-spin {
+    animation: spin 1s linear infinite;
+}
+
+/* Modal animation */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.modal-footer {
+    padding: 1rem;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-start;  /* Align buttons to the left */
+}
+
+.modal-footer .btn {
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.modal-footer .btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.modal-footer .btn-secondary:hover {
+    background: #5a6268;
+}
+
+.modal-footer .btn-danger {
+    background: #dc3545;
+    color: white;
+}
+
+.modal-footer .btn-danger:hover {
+    background: #c82333;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="admin-wrapper">
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1 class="admin-title">{% if user.language == 'en' %}Admin Panel{% else %}Panel Admin{% endif %}</h1>
+            <span class="admin-role">{{ user.role }}</span>
+        </div>
+
+        {% for msg in get_flashed_messages() %}
+        <div class="alert alert-info">
+            <i class='bx bx-info-circle'></i>
+            {{ msg }}
+        </div>
+        {% endfor %}
+
+        {% if user.role == 'owner' %}
+        <div class="create-user-section">
+            <div class="section-header">
+                <i class='bx bx-user-plus'></i>
+                <h2 class="section-title">{% if user.language == 'en' %}Create User{% else %}Buat Pengguna{% endif %}</h2>
+            </div>
+            <form method="POST" class="create-user-form">
+                <div class="form-group">
+                    <label>Username</label>
+                    <input type="text" name="new_username" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="new_email" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="new_password" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label>Role</label>
+                    <select name="new_role" class="form-control" required>
+                        <option value="user">User</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" name="create_user" class="btn btn-primary">
+                    <i class='bx bx-plus'></i>
+                    {% if user.language == 'en' %}Create User{% else %}Buat Pengguna{% endif %}
+                </button>
+            </form>
+        </div>
+        {% endif %}
+
+        <!-- Admin Selection Section -->
+        {% if user.role in ['owner', 'admin'] %}
+        <div class="admin-selection">
+            <div class="admin-selection-header">
+                <i class='bx bx-user-circle'></i>
+                <h2 class="admin-selection-title">
+                    {% if user.language == 'en' %}Select Admin to Manage{% else %}Pilih Admin untuk Dikelola{% endif %}
+                </h2>
+            </div>
+            <div class="admin-list">
+                {% for admin in users %}
+                    {% if admin.role == 'admin' %}
+                    <div class="admin-card {% if selected_user and selected_user.id == admin.id %}selected{% endif %}"
+                         onclick="selectAdmin({{ admin.id }})">
+                        <div class="admin-card-header">
+                            <img src="{{ url_for('static', filename='uploads/' + admin.profile_photo) }}"
+                                 alt="{{ admin.username }}"
+                                 class="admin-avatar">
+                            <div class="admin-info">
+                                <h3>{{ admin.username }}</h3>
+                                <p>{{ admin.email }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <!-- Enhanced Permissions Section -->
+        <div id="permissionsSection" class="permissions-section {% if selected_user %}visible{% endif %}">
+            <div class="permissions-header">
+                <div class="permissions-title">
+                    <i class='bx bx-shield-quarter'></i>
+                    <h2>
+                        {% if user.language == 'en' %}
+                            Manage Permissions for {{ selected_user.username if selected_user else '' }}
+                        {% else %}
+                            Kelola Izin untuk {{ selected_user.username if selected_user else '' }}
+                        {% endif %}
+                    </h2>
+                </div>
+            </div>
+            <div class="permissions-grid">
+                {% for perm_key, perm_name in AdminPermissions.get_all_permissions().items() %}
+                <div class="permission-card">
+                    <div class="permission-header">
+                        <div class="permission-info">
+                            <div class="permission-name">{{ perm_name }}</div>
+                            <div class="permission-description">{{ perm_key }}</div>
+                        </div>
+                        <label class="permission-toggle {% if not (user.role == 'owner' or user.has_permission('manage_permissions')) %}disabled{% endif %}">
+                            <input type="checkbox" 
+                                   name="permission" 
+                                   value="{{ perm_key }}"
+                                   {% if selected_user and selected_user.has_permission(perm_key) %}checked{% endif %}
+                                   {% if not (user.role == 'owner' or user.has_permission('manage_permissions')) %}disabled{% endif %}
+                                   onchange="updatePermission('{{ selected_user.id if selected_user else '' }}', '{{ perm_key }}', this.checked)">
+                            <span class="permission-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- Users Table -->
+        <div class="users-table-container">
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>User</th>
+                        <th>Role</th>
+                        <th>Promoted By</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for u in users %}
+                    <tr>
+                        <td>
+                            <div class="user-profile">
+                                <img src="{{ url_for('static', filename='uploads/' + u.profile_photo) }}" 
+                                     alt="{{ u.username }}" 
+                                     class="user-profile-img">
+                                <div class="user-info">
+                                    <span class="user-name">{{ u.username }}</span>
+                                    <span class="user-email">{{ u.email }}</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            {% if user.role == 'owner' or (user.role == 'admin' and user.has_permission('promote_user')) %}
+                            <form action="{{ url_for('change_role', uid=u.id) }}" method="POST" class="role-form">
+                                <select name="role" class="form-control">
+                                    {% if user.role == 'owner' %}
+                                        {% for r in ['user', 'admin', 'owner'] %}
+                                            <option value="{{ r }}" {% if r == u.role %}selected{% endif %}>{{ r }}</option>
+                                        {% endfor %}
+                                    {% else %}
+                                        {% for r in ['user', 'admin'] %}
+                                            <option value="{{ r }}" {% if r == u.role %}selected{% endif %}>{{ r }}</option>
+                                        {% endfor %}
+                                    {% endif %}
+                                </select>
+                                <button type="submit" class="btn btn-primary btn-sm">
+                                    <i class='bx bx-user-pin'></i>
+                                    {% if user.language == 'en' %}Update{% else %}Perbarui{% endif %}
+                                </button>
+                            </form>
+                            {% else %}
+                            <span class="user-role role-{{ u.role }}">{{ u.role }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if u.promoted_by %}
+                                <div class="promoter-info">
+                                    <img src="{{ url_for('static', filename='uploads/' + u.promoted_by.profile_photo) }}" 
+                                         alt="{{ u.promoted_by.username }}" 
+                                         class="promoter-img">
+                                    <span>{{ u.promoted_by.username }}</span>
+                                </div>
+                            {% else %}
+                                <span class="no-promoter">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="user-status {% if u.is_banned %}status-banned{% else %}status-active{% endif %}">
+                                <i class='bx {% if u.is_banned %}bx-x-circle{% else %}bx-check-circle{% endif %}'></i>
+                                {% if u.is_banned %}
+                                    {% if user.language == 'en' %}Banned{% else %}Diblokir{% endif %}
+                                {% else %}
+                                    {% if user.language == 'en' %}Active{% else %}Aktif{% endif %}
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                {% if user.role == 'owner' or (user.role == 'admin' and user.has_permission('ban_user')) %}
+                                    {% if u.role != 'owner' %}
+                                    <button onclick="window.location.href='{{ url_for('ban_user', uid=u.id) }}'"
+                                            class="btn {% if u.is_banned %}btn-success{% else %}btn-danger{% endif %} btn-sm">
+                                        <i class='bx {% if u.is_banned %}bx-lock-open{% else %}bx-lock{% endif %}'></i>
+                                        {% if u.is_banned %}
+                                            {% if user.language == 'en' %}Unban{% else %}Buka Blokir{% endif %}
+                                        {% else %}
+                                            {% if user.language == 'en' %}Ban{% else %}Blokir{% endif %}
+                                        {% endif %}
+                                    </button>
+                                    {% endif %}
+                                {% endif %}
+
+                                {% if user.role == 'owner' or (user.role == 'admin' and user.has_permission('view_transactions')) %}
+                                <button onclick="showTransactionHistory({{ u.id }}, '{{ u.username }}')"
+                                        class="btn btn-info btn-sm">
+                                    <i class='bx bx-history'></i>
+                                    {% if user.language == 'en' %}History{% else %}Riwayat{% endif %}
+                                </button>
+                                {% endif %}
+
+                                {% if (user.role == 'owner' or (user.role == 'admin' and user.has_permission('delete_user'))) and u.role != 'owner' and u.id != user.id %}
+                                <button onclick="showDeleteConfirmation({{ u.id }}, '{{ u.username }}')" 
+                                        class="btn btn-danger btn-sm">
+                                    <i class='bx bx-trash'></i>
+                                    {% if user.language == 'en' %}Delete{% else %}Hapus{% endif %}
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class='bx bx-trash'></i>
+                {% if user.language == 'en' %}Confirm Delete{% else %}Konfirmasi Hapus{% endif %}
+            </h3>
+            <button type="button" class="close" onclick="hideDeleteModal()">×</button>
+        </div>
+        <div class="modal-body">
+            <p id="deleteConfirmText"></p>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" onclick="hideDeleteModal()">
+                {% if user.language == 'en' %}Cancel{% else %}Batal{% endif %}
+            </button>
+            <form method="POST" style="display: inline;">
+                <input type="hidden" name="delete_user" id="deleteUserId">
+                <button type="submit" class="btn btn-danger">
+                    {% if user.language == 'en' %}Delete{% else %}Hapus{% endif %}
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Transaction History Modal -->
+<div id="transactionModal" class="modal">
+    <div class="modal-content modal-lg">
+        <div class="modal-header">
+            <h3 class="modal-title">
+                <i class='bx bx-history'></i>
+                <span id="transactionTitle"></span>
+            </h3>
+            <button type="button" class="close" onclick="hideTransactionModal()">
+                <i class='bx bx-x'></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div id="transactionList"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+function showTransactionHistory(userId, username) {
+    const modal = document.getElementById('transactionModal');
+    const title = document.getElementById('transactionTitle');
+    const list = document.getElementById('transactionList');
+    
+    title.textContent = `{% if user.language == 'en' %}Transaction History - ${username}{% else %}Riwayat Transaksi - ${username}{% endif %}`;
+    list.innerHTML = '<div class="text-center"><i class="bx bx-loader bx-spin"></i> Loading...</div>';
+    modal.classList.add('show');
+    
+    fetch(`/admin/transactions/${userId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.transactions.length === 0) {
+                list.innerHTML = `<div class="no-transactions">
+                    <i class='bx bx-info-circle'></i>
+                    {% if user.language == 'en' %}No transactions found{% else %}Tidak ada transaksi{% endif %}
+                </div>`;
+                return;
+            }
+            
+            list.innerHTML = data.transactions.map(tx => `
+                <div class="transaction-item">
+                    <div class="transaction-icon ${tx.sender_id === userId ? 'sent' : 'received'}">
+                        <i class='bx ${tx.sender_id === userId ? 'bx-up-arrow-alt' : 'bx-down-arrow-alt'}'></i>
+                    </div>
+                    <div class="transaction-details">
+                        <div class="transaction-primary">
+                            ${tx.sender_id === userId ? 
+                                `{% if user.language == 'en' %}Sent to{% else %}Kirim ke{% endif %} ${tx.receiver_username}` :
+                                `{% if user.language == 'en' %}Received from{% else %}Terima dari{% endif %} ${tx.sender_username}`}
+                        </div>
+                        <div class="transaction-date">${tx.timestamp}</div>
+                        ${tx.message ? `<div class="transaction-message">"${tx.message}"</div>` : ''}
+                    </div>
+                    <div class="transaction-amount ${tx.sender_id === userId ? 'sent' : 'received'}">
+                        ${tx.sender_id === userId ? '-' : '+'}Rp ${tx.amount.toLocaleString('id-ID')}
+                    </div>
+                </div>
+            `).join('');
+        })
+        .catch(error => {
+            list.innerHTML = `<div class="no-transactions text-danger">
+                <i class='bx bx-error'></i>
+                {% if user.language == 'en' %}Error loading transactions{% else %}Error memuat transaksi{% endif %}
+            </div>`;
+            console.error('Error:', error);
+        });
+}
+
+function hideTransactionModal() {
+    const modal = document.getElementById('transactionModal');
+    modal.classList.remove('show');
+}
+
+function showDeleteConfirmation(userId, username) {
+    const modal = document.getElementById('deleteModal');
+    const confirmText = document.getElementById('deleteConfirmText');
+    const deleteUserId = document.getElementById('deleteUserId');
+    
+    confirmText.textContent = `{% if user.language == 'en' %}Are you sure you want to delete ${username}?{% else %}Apakah Anda yakin ingin menghapus ${username}?{% endif %}`;
+    deleteUserId.value = userId;
+    modal.classList.add('show');
+}
+
+function hideDeleteModal() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('show');
+}
+
+// Close modals when clicking outside
+window.onclick = function(event) {
+    if (event.target.classList.contains('modal')) {
+        event.target.classList.remove('show');
+    }
+};
+
+function selectAdmin(adminId) {
+    window.location.href = window.location.pathname + '?user_id=' + adminId;
+}
+
+function updatePermission(userId, permission, enabled) {
+    // Only allow updates if user has permission
+    if (!{{ 'true' if user.role == 'owner' or user.has_permission('manage_permissions') else 'false' }}) {
+        return;
+    }
+    
+    fetch('/admin/permissions/update', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            user_id: userId,
+            permission: permission,
+            enabled: enabled
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show success notification
+            showNotification(data.message, 'success');
+        } else {
+            // Show error notification
+            showNotification(data.message, 'error');
+            // Revert the checkbox
+            document.querySelector(`input[value="${permission}"]`).checked = !enabled;
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Error updating permission', 'error');
+        // Revert the checkbox
+        document.querySelector(`input[value="${permission}"]`).checked = !enabled;
+    });
+}
+
+function showNotification(message, type) {
+    const notification = document.createElement('div');
+    notification.className = `notification ${type}`;
+    notification.textContent = message;
+    document.body.appendChild(notification);
+    
+    setTimeout(() => {
+        notification.remove();
+    }, 3000);
+}
+</script>
+
+{% endblock %}
