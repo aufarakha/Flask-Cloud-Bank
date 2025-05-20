@@ -20,7 +20,7 @@ Aplikasi perbankan web modern yang dibangun dengan Flask, dilengkapi dengan oten
 1. Clone repository:
 
 ```bash
-git clone https://github.com/yourusername/Flask-Cloud-Bank.git
+git clone https://github.com/aufarakha/Flask-Cloud-Bank.git
 cd Flask-Cloud-Bank
 ```
 
