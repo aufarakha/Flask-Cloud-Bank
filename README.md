@@ -20,7 +20,7 @@ A modern banking web application built with Flask, featuring user authentication
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/yourusername/Flask-Cloud-Bank.git
+git clone https://github.com/aufarakha/Flask-Cloud-Bank.git
 cd Flask-Cloud-Bank
 ```
 
